@@ -2,44 +2,26 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 乾淨嵌入</title>
-  <script src="https://www.geogebra.org/apps/deployggb.js"></script>
+  <title>GeoGebra 全螢幕示範</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: hidden;
     }
-    #ggb-element {
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border: none;
       width: 100%;
       height: 100%;
+      border: 1px solid #e4e4e4;
+      border-radius: 4px;
     }
   </style>
 </head>
 <body>
-  <div id="ggb-element"></div>
-  <script>
-    var app = new GGBApplet({
-      "appName": "graphing", // 使用「圖形」應用
-      "material_id": "cbea66c7", // 你的活動 ID
-      "showToolBar": false, // 隱藏工具列
-      "showAlgebraInput": false, // 隱藏代數輸入框
-      "showMenuBar": false, // 隱藏菜單列
-      "showResetIcon": false, // 隱藏重設按鈕
-      "showZoomButtons": false, // 隱藏縮放按鈕
-      "showFullscreenButton": false, // 隱藏全螢幕按鈕
-      "showLogging": false, // 隱藏日誌
-      "showSuggestionButtons": false, // 隱藏建議按鈕
-      "enableLabelDrags": true, // 允許拖動標籤
-      "enableShiftDragZoom": true, // 允許拖動畫面和縮放
-      "useBrowserForJS": true, // 使用瀏覽器處理JS
-      "showToolBarHelp": false // 隱藏說明
-    }, true);
-
-    window.addEventListener("load", function () {
-      app.inject('ggb-element');
-    });
-  </script>
+  <iframe src="https://www.geogebra.org/calculator/cbea66c7?embed" allowfullscreen frameborder="0"></iframe>
 </body>
 </html>
