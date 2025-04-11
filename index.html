@@ -24,15 +24,17 @@
       "appName": "graphing", // 使用「圖形」應用
       "material_id": "cbea66c7", // 你的活動 ID
       "showToolBar": false, // 隱藏工具列
-      "showAlgebraInput": false, // 隱藏代數輸入
+      "showAlgebraInput": false, // 隱藏代數輸入框
       "showMenuBar": false, // 隱藏菜單列
-      "showResetIcon": false, // 隱藏重置按鈕
+      "showResetIcon": false, // 隱藏重設按鈕
       "showZoomButtons": false, // 隱藏縮放按鈕
       "showFullscreenButton": false, // 隱藏全螢幕按鈕
-      "enableShiftDragZoom": true, // 啟用移動畫面和縮放
+      "enableShiftDragZoom": true, // 允許拖動畫面、縮放
       "showLogging": false, // 隱藏日誌
       "showSuggestionButtons": false, // 隱藏建議按鈕
-      "enableLabelDrags": true // 允許拖動標籤
+      "enableLabelDrags": true, // 允許拖動標籤
+      "useBrowserForJS": true, // 使用瀏覽器處理JS，確保加載穩定
+      "showToolBarHelp": false // 隱藏說明
     }, true);
     window.addEventListener("load", function () {
       app.inject('ggb-element');
