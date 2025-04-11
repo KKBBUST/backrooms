@@ -9,7 +9,6 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      background: #fff;
       overflow: hidden;
     }
     #ggb-element {
@@ -22,18 +21,18 @@
   <div id="ggb-element"></div>
   <script>
     var app = new GGBApplet({
-      "appName": "graphing", // 可用 "classic", "graphing", "geometry"
+      "appName": "graphing", // 使用「圖形」應用
       "material_id": "cbea66c7", // 你的活動 ID
-      "showToolBar": false,
-      "showAlgebraInput": false,
-      "showMenuBar": false,
-      "showResetIcon": false,
-      "showZoomButtons": false,
-      "showFullscreenButton": false,
-      "enableShiftDragZoom": false,
-      "showLogging": false,
-      "showSuggestionButtons": false,
-      "enableLabelDrags": false
+      "showToolBar": false, // 隱藏工具列
+      "showAlgebraInput": false, // 隱藏代數輸入
+      "showMenuBar": false, // 隱藏菜單列
+      "showResetIcon": false, // 隱藏重置按鈕
+      "showZoomButtons": false, // 隱藏縮放按鈕
+      "showFullscreenButton": false, // 隱藏全螢幕按鈕
+      "enableShiftDragZoom": true, // 啟用移動畫面和縮放
+      "showLogging": false, // 隱藏日誌
+      "showSuggestionButtons": false, // 隱藏建議按鈕
+      "enableLabelDrags": true // 允許拖動標籤
     }, true);
     window.addEventListener("load", function () {
       app.inject('ggb-element');
