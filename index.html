@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 定位完整功能</title>
+  <title>GeoGebra 定位示範</title>
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
   <style>
     html, body {
@@ -10,23 +10,23 @@
       padding: 0;
       height: 100%;
       overflow: hidden;
-      font-family: sans-serif;
     }
     #controls {
-      height: 50px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.9);
       padding: 10px;
-      background: #f0f0f0;
+      border-radius: 8px;
+      z-index: 10;
+      font-family: sans-serif;
     }
     #ggb-element {
       width: 100%;
-      height: calc(100% - 50px);
+      height: 100%;
     }
     input {
       width: 60px;
-      margin-right: 5px;
-    }
-    button:disabled {
-      opacity: 0.5;
     }
   </style>
 </head>
@@ -34,8 +34,9 @@
   <div id="controls">
     X: <input type="number" id="xCoord" value="0">
     Y: <input type="number" id="yCoord" value="0">
-    <button id="moveButton" onclick="moveTo()" disabled>定位（等待載入）</button>
+    <button id="moveButton" onclick="moveTo()" disabled>等待載入...</button>
   </div>
+
   <div id="ggb-element"></div>
 
   <script>
@@ -43,17 +44,19 @@
 
     const app = new GGBApplet({
       appName: "classic",
-      material_id: "cbea66c7",
+      material_id: "xjxdh5v4", // ⬅️ 這裡改成你自己的活動 ID
       showToolBar: false,
       showAlgebraInput: false,
       showMenuBar: false,
       showZoomButtons: false,
       showFullscreenButton: false,
+      enableShiftDragZoom: true,
       ggbOnInit: function(api) {
-        console.log("GeoGebra 載入完成！");
+        console.log("GeoGebra 已載入");
         ggbAPI = api;
-        document.getElementById("moveButton").disabled = false;
-        document.getElementById("moveButton").textContent = "定位";
+        const btn = document.getElementById("moveButton");
+        btn.disabled = false;
+        btn.textContent = "定位";
       }
     }, true);
 
@@ -63,15 +66,13 @@
 
     function moveTo() {
       if (!ggbAPI) {
-        alert("GeoGebra 尚未載入完成！");
+        alert("尚未載入完成！");
         return;
       }
-
       const x = parseFloat(document.getElementById("xCoord").value);
       const y = parseFloat(document.getElementById("yCoord").value);
-      const viewRange = 10;
-
-      ggbAPI.setCoordSystem(x - viewRange / 2, x + viewRange / 2, y - viewRange / 2, y + viewRange / 2);
+      const range = 10;
+      ggbAPI.setCoordSystem(x - range/2, x + range/2, y - range/2, y + range/2);
     }
   </script>
 </body>
