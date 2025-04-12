@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 自動定位工具</title>
+  <title>GeoGebra 自動定位到圖表 (0, 0)</title>
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
   <style>
     html, body {
@@ -16,46 +16,29 @@
       width: 100%;
       height: 100%;
     }
-    #controls {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: rgba(255,255,255,0.95);
-      padding: 10px;
-      border-radius: 8px;
-      font-family: sans-serif;
-      z-index: 1000;
-      box-shadow: 0 0 8px rgba(0,0,0,0.2);
-    }
-    input {
-      width: 60px;
-      font-size: 14px;
-    }
   </style>
 </head>
 <body>
-  <div id="controls">
-    X: <input type="number" id="xCoord" value="0" oninput="moveTo()">
-    Y: <input type="number" id="yCoord" value="0" oninput="moveTo()">
-  </div>
   <div id="ggb-element"></div>
 
   <script>
-    let ggbApp, ggbAPI = null;
+    var ggbApp = null;
 
-    // 設定 GeoGebra 初始化完成後的回呼函式
-    window.ggbOnInit = function(api) {
-      ggbAPI = api;
-      console.log("GeoGebra 初始化完成");
+    // 當GeoGebra活動初始化完成時執行的函數
+    function initializeGeoGebra(api) {
+      ggbApp = api;
+      console.log("GeoGebra 活動初始化完成");
 
-      // 初始化後立即定位到 (0, 0)
-      moveTo();
-    };
+      // 延遲一小段時間再定位到 (0, 0)，確保完全載入後執行
+      setTimeout(function() {
+        ggbApp.setCoordSystem(-5, 5, -5, 5); // 設置顯示範圍
+        ggbApp.setViewPosition(0, 0); // 定位到 (0, 0)
+      }, 500);  // 延遲 500ms 確保完全加載
+    }
 
-    // 建立並注入 Applet
-    ggbApp = new GGBApplet({
-      "appName": "classic",
-      "material_id": "cbea66c7", // 使用你提供的 ID
+    var app = new GGBApplet({
+      "appName": "classic", // 可用 "classic", "graphing", "geometry"
+      "material_id": "cbea66c7", // 你的 GeoGebra 活動 ID
       "showToolBar": false,
       "showAlgebraInput": false,
       "showMenuBar": false,
@@ -63,28 +46,12 @@
       "showFullscreenButton": false,
       "enableShiftDragZoom": true,
       "showResetIcon": false,
-      "ggbOnInit": "ggbOnInit"
+      "ggbOnInit": "initializeGeoGebra" // 初始化時調用的函數
     }, true);
 
-    // 監聽頁面載入，並加載 GeoGebra
     window.addEventListener("load", function () {
-      ggbApp.inject('ggb-element');
+      app.inject('ggb-element');
     });
-
-    // 自動移動畫面函式
-    function moveTo() {
-      // 確保 ggbAPI 已經被初始化
-      if (!ggbAPI) {
-        console.log("GeoGebra 尚未完全載入，請稍後再試");
-        return;
-      }
-      const x = parseFloat(document.getElementById("xCoord").value);
-      const y = parseFloat(document.getElementById("yCoord").value);
-      
-      // 設定畫面範圍與坐標
-      const span = 10; // 畫面縮放範圍大小
-      ggbAPI.setCoordSystem(x - span / 2, x + span / 2, y - span / 2, y + span / 2);
-    }
   </script>
 </body>
 </html>
