@@ -10,6 +10,7 @@
       padding: 0;
       height: 100%;
       overflow: hidden;
+      background: #fff;
     }
     #ggb-element {
       width: 100%;
@@ -19,14 +20,20 @@
       position: absolute;
       top: 10px;
       left: 10px;
-      background: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.95);
       padding: 10px;
-      border-radius: 6px;
+      border-radius: 8px;
       font-family: sans-serif;
-      z-index: 10;
+      z-index: 1000;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
     }
     input {
       width: 60px;
+      font-size: 14px;
+    }
+    button {
+      font-size: 14px;
+      margin-left: 5px;
     }
   </style>
 </head>
@@ -41,7 +48,7 @@
   <script>
     let ggbApp, ggbAPI = null;
 
-    // 正確建立 GGBApplet 並設定 ggbOnInit 為全域函式
+    // 設定 GeoGebra 初始化完成後的回呼函式
     window.ggbOnInit = function(api) {
       ggbAPI = api;
       const btn = document.getElementById("moveButton");
@@ -50,7 +57,7 @@
       btn.onclick = moveTo;
     };
 
-    // 建立 applet
+    // 建立並注入 Applet
     ggbApp = new GGBApplet({
       "appName": "classic",
       "material_id": "cbea66c7",
@@ -60,10 +67,10 @@
       "showZoomButtons": false,
       "showFullscreenButton": false,
       "enableShiftDragZoom": true,
-      "ggbOnInit": "ggbOnInit"  // 注意：是字串，代表函數名稱
+      "showResetIcon": false,
+      "ggbOnInit": "ggbOnInit"
     }, true);
 
-    // 載入 applet
     window.addEventListener("load", function () {
       ggbApp.inject('ggb-element');
     });
@@ -73,7 +80,7 @@
       if (!ggbAPI) return alert("尚未載入");
       const x = parseFloat(document.getElementById("xCoord").value);
       const y = parseFloat(document.getElementById("yCoord").value);
-      const span = 10;
+      const span = 10; // 畫面縮放範圍大小，可調整
       ggbAPI.setCoordSystem(x - span/2, x + span/2, y - span/2, y + span/2);
     }
   </script>
