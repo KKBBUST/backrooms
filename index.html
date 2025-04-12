@@ -46,6 +46,7 @@
     // 設定 GeoGebra 初始化完成後的回呼函式
     window.ggbOnInit = function(api) {
       ggbAPI = api;
+      console.log("GeoGebra 初始化完成");
     };
 
     // 建立並注入 Applet
@@ -71,7 +72,7 @@
     function moveTo() {
       // 確保 ggbAPI 已經被初始化
       if (!ggbAPI) {
-        console.log("GeoGebra 尚未完全載入");
+        console.log("GeoGebra 尚未完全載入，請稍後再試");
         return;
       }
       const x = parseFloat(document.getElementById("xCoord").value);
