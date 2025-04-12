@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 定位工具</title>
+  <title>GeoGebra 自動定位工具</title>
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
   <style>
     html, body {
@@ -31,17 +31,12 @@
       width: 60px;
       font-size: 14px;
     }
-    button {
-      font-size: 14px;
-      margin-left: 5px;
-    }
   </style>
 </head>
 <body>
   <div id="controls">
-    X: <input type="number" id="xCoord" value="0">
-    Y: <input type="number" id="yCoord" value="0">
-    <button id="moveButton" disabled>尚未載入</button>
+    X: <input type="number" id="xCoord" value="0" oninput="moveTo()">
+    Y: <input type="number" id="yCoord" value="0" oninput="moveTo()">
   </div>
   <div id="ggb-element"></div>
 
@@ -51,10 +46,6 @@
     // 設定 GeoGebra 初始化完成後的回呼函式
     window.ggbOnInit = function(api) {
       ggbAPI = api;
-      const btn = document.getElementById("moveButton");
-      btn.disabled = false;
-      btn.textContent = "定位";
-      btn.onclick = moveTo;
     };
 
     // 建立並注入 Applet
@@ -76,23 +67,13 @@
       ggbApp.inject('ggb-element');
     });
 
-    // 確保 GeoGebra 完全載入後啟用按鈕
-    let intervalCheck = setInterval(function() {
-      if (ggbAPI !== null) {
-        const btn = document.getElementById("moveButton");
-        btn.disabled = false;
-        btn.textContent = "定位";
-        clearInterval(intervalCheck); // 停止檢查
-      }
-    }, 500);
-
-    // 移動畫面函式
+    // 自動移動畫面函式
     function moveTo() {
-      if (!ggbAPI) return alert("尚未載入");
+      if (!ggbAPI) return;
       const x = parseFloat(document.getElementById("xCoord").value);
       const y = parseFloat(document.getElementById("yCoord").value);
       const span = 10; // 畫面縮放範圍大小，可調整
-      ggbAPI.setCoordSystem(x - span/2, x + span/2, y - span/2, y + span/2);
+      ggbAPI.setCoordSystem(x - span / 2, x + span / 2, y - span / 2, y + span / 2);
     }
   </script>
 </body>
