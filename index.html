@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 自動定位 (0, 0)</title>
+  <title>GeoGebra 自動定位至 (0, 0)</title>
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
   <style>
     html, body {
@@ -33,9 +33,8 @@
       "showResetIcon": false,
       "enableShiftDragZoom": true,
       "ggbOnInit": function(api) {
-        // 當GeoGebra加載後自動定位
-        api.setCoordSystem(-5, 5, -5, 5);  // 設定顯示範圍
-        api.setViewPosition(0, 0);         // 定位到 (0, 0)
+        api.setCoordSystem(-5, 5, -5, 5); // 設定顯示範圍
+        api.setViewPosition(0, 0);        // 定位至 (0, 0)
       }
     }, true);
 
