@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 自動定位</title>
+  <title>GeoGebra 自動定位到圖表 (0, 0)</title>
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
   <style>
     html, body {
@@ -28,15 +28,15 @@
     window.ggbOnInit = function(api) {
       ggbApp = api;
       console.log("GeoGebra 已初始化");
-      
-      // 在 GeoGebra 加載完後，設置初始顯示範圍 (0, 0)
-      ggbApp.setCoordSystem(-5, 5, -5, 5);  // 設定顯示範圍，顯示 -5 到 5 的範圍
-      ggbApp.setViewPosition(0, 0);          // 設置畫面位置到 (0, 0)
+
+      // 這裡設置圖表的初始位置，即將視圖移動到 (0, 0)
+      ggbApp.setViewPosition(0, 0); // 直接將圖表定位到坐標(0, 0)
+      ggbApp.setCoordSystem(-5, 5, -5, 5);  // 可選：設置顯示範圍
     };
 
     var app = new GGBApplet({
-      "appName": "classic", // 可以使用 "classic", "graphing", "geometry" 等
-      "material_id": "cbea66c7", // 使用的 GeoGebra 活動 ID
+      "appName": "classic", // 可用 "classic", "graphing", "geometry"
+      "material_id": "cbea66c7", // 你的 GeoGebra 活動 ID
       "showToolBar": false,
       "showAlgebraInput": false,
       "showMenuBar": false,
