@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 定位測試</title>
+  <title>GeoGebra 定位嵌入</title>
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
   <style>
     html, body {
@@ -10,31 +10,40 @@
       padding: 0;
       height: 100%;
       overflow: hidden;
-    }
-    #ggb-element {
-      width: 100%;
-      height: calc(100% - 50px);
+      font-family: sans-serif;
     }
     #controls {
       height: 50px;
       padding: 10px;
       background: #eee;
     }
+    #ggb-element {
+      width: 100%;
+      height: calc(100% - 50px);
+    }
+    input {
+      width: 60px;
+      margin-right: 5px;
+    }
   </style>
 </head>
 <body>
   <div id="controls">
-    <button onclick="moveToCenter()">移動到 (5, 5)</button>
+    X: <input type="number" id="xCoord" value="0">
+    Y: <input type="number" id="yCoord" value="0">
+    <button onclick="moveTo()">定位</button>
   </div>
   <div id="ggb-element"></div>
 
   <script>
     let ggbApp = new GGBApplet({
-      appName: "graphing",
+      appName: "classic",  // 用 classic 保留所有元素
       material_id: "cbea66c7",
       showToolBar: false,
       showAlgebraInput: false,
       showMenuBar: false,
+      showZoomButtons: false,
+      showFullscreenButton: false,
       ggbOnInit: function(api) {
         window.ggbAPI = api;
       }
@@ -44,16 +53,15 @@
       ggbApp.inject('ggb-element');
     });
 
-    function moveToCenter() {
+    function moveTo() {
       if (!window.ggbAPI) {
         alert("GeoGebra 尚未載入完成！");
         return;
       }
 
-      // 直接設定座標系統
-      const x = 5;
-      const y = 5;
-      const range = 10; // 讓畫面寬度維持 10 單位
+      const x = parseFloat(document.getElementById("xCoord").value);
+      const y = parseFloat(document.getElementById("yCoord").value);
+      const range = 10;
 
       const xmin = x - range / 2;
       const xmax = x + range / 2;
