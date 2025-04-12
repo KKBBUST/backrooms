@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 自動定位到圖表 (0, 0)</title>
+  <title>GeoGebra 自動定位 (0, 0)</title>
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
   <style>
     html, body {
@@ -22,35 +22,25 @@
   <div id="ggb-element"></div>
 
   <script>
-    var ggbApp = null;
-
-    // 當GeoGebra活動初始化完成時執行的函數
-    function initializeGeoGebra(api) {
-      ggbApp = api;
-      console.log("GeoGebra 活動初始化完成");
-
-      // 延遲一小段時間再定位到 (0, 0)，確保完全載入後執行
-      setTimeout(function() {
-        ggbApp.setCoordSystem(-5, 5, -5, 5); // 設置顯示範圍
-        ggbApp.setViewPosition(0, 0); // 定位到 (0, 0)
-      }, 500);  // 延遲 500ms 確保完全加載
-    }
-
-    var app = new GGBApplet({
-      "appName": "classic", // 可用 "classic", "graphing", "geometry"
+    var ggbApp = new GGBApplet({
+      "appName": "classic", // 可選擇 "classic", "graphing", "geometry"
       "material_id": "cbea66c7", // 你的 GeoGebra 活動 ID
       "showToolBar": false,
       "showAlgebraInput": false,
       "showMenuBar": false,
       "showZoomButtons": false,
       "showFullscreenButton": false,
-      "enableShiftDragZoom": true,
       "showResetIcon": false,
-      "ggbOnInit": "initializeGeoGebra" // 初始化時調用的函數
+      "enableShiftDragZoom": true,
+      "ggbOnInit": function(api) {
+        // 當GeoGebra加載後自動定位
+        api.setCoordSystem(-5, 5, -5, 5);  // 設定顯示範圍
+        api.setViewPosition(0, 0);         // 定位到 (0, 0)
+      }
     }, true);
 
     window.addEventListener("load", function () {
-      app.inject('ggb-element');
+      ggbApp.inject('ggb-element');
     });
   </script>
 </body>
