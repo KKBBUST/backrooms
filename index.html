@@ -60,7 +60,7 @@
     // 建立並注入 Applet
     ggbApp = new GGBApplet({
       "appName": "classic",
-      "material_id": "cbea66c7",
+      "material_id": "cbea66c7", // 使用你提供的 ID
       "showToolBar": false,
       "showAlgebraInput": false,
       "showMenuBar": false,
@@ -71,9 +71,20 @@
       "ggbOnInit": "ggbOnInit"
     }, true);
 
+    // 監聽頁面載入，並加載 GeoGebra
     window.addEventListener("load", function () {
       ggbApp.inject('ggb-element');
     });
+
+    // 確保 GeoGebra 完全載入後啟用按鈕
+    let intervalCheck = setInterval(function() {
+      if (ggbAPI !== null) {
+        const btn = document.getElementById("moveButton");
+        btn.disabled = false;
+        btn.textContent = "定位";
+        clearInterval(intervalCheck); // 停止檢查
+      }
+    }, 500);
 
     // 移動畫面函式
     function moveTo() {
