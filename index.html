@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 乾淨嵌入 + 定位功能</title>
+  <title>GeoGebra 定位功能</title>
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
   <style>
     html, body {
@@ -11,83 +11,68 @@
       height: 100%;
       background: #fff;
       overflow: hidden;
-      font-family: sans-serif;
     }
     #ggb-element {
-      position: absolute;
-      top: 50px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-    #control-panel {
-      position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
-      background: #f8f8f8;
-      padding: 5px 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      z-index: 10;
+      height: calc(100% - 50px);
     }
-    #control-panel input {
-      width: 60px;
-      margin: 0 5px;
+    #controls {
+      height: 50px;
+      padding: 10px;
+      background-color: #eee;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
-  <div id="control-panel">
-    X: <input type="number" id="xCoord" value="0">
-    Y: <input type="number" id="yCoord" value="0">
-    <button onclick="moveToCoordinates()">定位</button>
+  <div id="controls">
+    X座標：<input type="number" id="xInput" value="0">
+    Y座標：<input type="number" id="yInput" value="0">
+    <button onclick="moveTo()">定位</button>
   </div>
-
   <div id="ggb-element"></div>
 
   <script>
-    let api = null;
+    let ggbApp;
+    let ggbAPI = null;
 
-    var app = new GGBApplet({
-      "appName": "classic",
+    ggbApp = new GGBApplet({
+      "appName": "graphing",
       "material_id": "cbea66c7",
       "showToolBar": false,
       "showAlgebraInput": false,
       "showMenuBar": false,
       "showResetIcon": false,
       "showZoomButtons": false,
-      "showFullscreenButton": true,
       "enableShiftDragZoom": true,
-      "showLogging": false,
-      "showSuggestionButtons": false,
-      "enableLabelDrags": false
+      "ggbOnInit": function(api) {
+        ggbAPI = api;
+      }
     }, true);
 
-    // 當 GeoGebra 載入後取得 API 控制權
-    function ggbOnInit(ggbAPI) {
-      api = ggbAPI;
-    }
-
-    window.addEventListener("load", function () {
-      app.inject('ggb-element');
+    window.addEventListener("load", function() {
+      ggbApp.inject('ggb-element');
     });
 
-    function moveToCoordinates() {
-      if (!api) return;
-      const x = parseFloat(document.getElementById("xCoord").value);
-      const y = parseFloat(document.getElementById("yCoord").value);
+    function moveTo() {
+      if (!ggbAPI) return;
+      const x = parseFloat(document.getElementById("xInput").value);
+      const y = parseFloat(document.getElementById("yInput").value);
 
-      const scaleX = api.getXAxisScale();
-      const scaleY = api.getYAxisScale();
-      const width = api.getWidth();
-      const height = api.getHeight();
+      const xScale = ggbAPI.getXAxisScale();
+      const yScale = ggbAPI.getYAxisScale();
+      const width = ggbAPI.getWidth();
+      const height = ggbAPI.getHeight();
 
-      const xmin = x - width / (2 * scaleX);
-      const xmax = x + width / (2 * scaleX);
-      const ymin = y - height / (2 * scaleY);
-      const ymax = y + height / (2 * scaleY);
+      const xmin = x - (width / (2 * xScale));
+      const xmax = x + (width / (2 * xScale));
+      const ymin = y - (height / (2 * yScale));
+      const ymax = y + (height / (2 * yScale));
 
-      api.setCoordSystem(xmin, xmax, ymin, ymax);
+      ggbAPI.setCoordSystem(xmin, xmax, ymin, ymax);
     }
   </script>
 </body>
