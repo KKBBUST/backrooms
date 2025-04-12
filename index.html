@@ -2,14 +2,13 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 定位功能</title>
+  <title>GeoGebra 定位測試</title>
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      background: #fff;
       overflow: hidden;
     }
     #ggb-element {
@@ -19,37 +18,25 @@
     #controls {
       height: 50px;
       padding: 10px;
-      background-color: #eee;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: #eee;
     }
   </style>
 </head>
 <body>
   <div id="controls">
-    X座標：<input type="number" id="xInput" value="0">
-    Y座標：<input type="number" id="yInput" value="0">
-    <button onclick="moveTo()">定位</button>
+    <button onclick="moveToCenter()">移動到 (5, 5)</button>
   </div>
   <div id="ggb-element"></div>
 
   <script>
-    let ggbApp;
-    let ggbAPI = null;
-
-    ggbApp = new GGBApplet({
-      "appName": "graphing",
-      "material_id": "cbea66c7",
-      "showToolBar": false,
-      "showAlgebraInput": false,
-      "showMenuBar": false,
-      "showResetIcon": false,
-      "showZoomButtons": false,
-      "enableShiftDragZoom": true,
-      "ggbOnInit": function(api) {
-        ggbAPI = api;
+    let ggbApp = new GGBApplet({
+      appName: "graphing",
+      material_id: "cbea66c7",
+      showToolBar: false,
+      showAlgebraInput: false,
+      showMenuBar: false,
+      ggbOnInit: function(api) {
+        window.ggbAPI = api;
       }
     }, true);
 
@@ -57,22 +44,23 @@
       ggbApp.inject('ggb-element');
     });
 
-    function moveTo() {
-      if (!ggbAPI) return;
-      const x = parseFloat(document.getElementById("xInput").value);
-      const y = parseFloat(document.getElementById("yInput").value);
+    function moveToCenter() {
+      if (!window.ggbAPI) {
+        alert("GeoGebra 尚未載入完成！");
+        return;
+      }
 
-      const xScale = ggbAPI.getXAxisScale();
-      const yScale = ggbAPI.getYAxisScale();
-      const width = ggbAPI.getWidth();
-      const height = ggbAPI.getHeight();
+      // 直接設定座標系統
+      const x = 5;
+      const y = 5;
+      const range = 10; // 讓畫面寬度維持 10 單位
 
-      const xmin = x - (width / (2 * xScale));
-      const xmax = x + (width / (2 * xScale));
-      const ymin = y - (height / (2 * yScale));
-      const ymax = y + (height / (2 * yScale));
+      const xmin = x - range / 2;
+      const xmax = x + range / 2;
+      const ymin = y - range / 2;
+      const ymax = y + range / 2;
 
-      ggbAPI.setCoordSystem(xmin, xmax, ymin, ymax);
+      window.ggbAPI.setCoordSystem(xmin, xmax, ymin, ymax);
     }
   </script>
 </body>
