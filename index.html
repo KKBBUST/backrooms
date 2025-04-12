@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 定位嵌入</title>
+  <title>GeoGebra 定位完整功能</title>
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
   <style>
     html, body {
@@ -15,7 +15,7 @@
     #controls {
       height: 50px;
       padding: 10px;
-      background: #eee;
+      background: #f0f0f0;
     }
     #ggb-element {
       width: 100%;
@@ -25,19 +25,24 @@
       width: 60px;
       margin-right: 5px;
     }
+    button:disabled {
+      opacity: 0.5;
+    }
   </style>
 </head>
 <body>
   <div id="controls">
     X: <input type="number" id="xCoord" value="0">
     Y: <input type="number" id="yCoord" value="0">
-    <button onclick="moveTo()">定位</button>
+    <button id="moveButton" onclick="moveTo()" disabled>定位（等待載入）</button>
   </div>
   <div id="ggb-element"></div>
 
   <script>
-    let ggbApp = new GGBApplet({
-      appName: "classic",  // 用 classic 保留所有元素
+    let ggbAPI = null;
+
+    const app = new GGBApplet({
+      appName: "classic",
       material_id: "cbea66c7",
       showToolBar: false,
       showAlgebraInput: false,
@@ -45,30 +50,28 @@
       showZoomButtons: false,
       showFullscreenButton: false,
       ggbOnInit: function(api) {
-        window.ggbAPI = api;
+        console.log("GeoGebra 載入完成！");
+        ggbAPI = api;
+        document.getElementById("moveButton").disabled = false;
+        document.getElementById("moveButton").textContent = "定位";
       }
     }, true);
 
-    window.addEventListener("load", function() {
-      ggbApp.inject('ggb-element');
+    window.addEventListener("load", function () {
+      app.inject('ggb-element');
     });
 
     function moveTo() {
-      if (!window.ggbAPI) {
+      if (!ggbAPI) {
         alert("GeoGebra 尚未載入完成！");
         return;
       }
 
       const x = parseFloat(document.getElementById("xCoord").value);
       const y = parseFloat(document.getElementById("yCoord").value);
-      const range = 10;
+      const viewRange = 10;
 
-      const xmin = x - range / 2;
-      const xmax = x + range / 2;
-      const ymin = y - range / 2;
-      const ymax = y + range / 2;
-
-      window.ggbAPI.setCoordSystem(xmin, xmax, ymin, ymax);
+      ggbAPI.setCoordSystem(x - viewRange / 2, x + viewRange / 2, y - viewRange / 2, y + viewRange / 2);
     }
   </script>
 </body>
