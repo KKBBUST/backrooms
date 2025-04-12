@@ -2,15 +2,15 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 自動定位至 (0, 0)</title>
+  <title>GeoGebra 完全自定義圖形</title>
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: hidden;
       background: #fff;
+      overflow: hidden;
     }
     #ggb-element {
       width: 100%;
@@ -22,24 +22,33 @@
   <div id="ggb-element"></div>
 
   <script>
-    var ggbApp = new GGBApplet({
-      "appName": "classic", // 可選擇 "classic", "graphing", "geometry"
-      "material_id": "cbea66c7", // 你的 GeoGebra 活動 ID
-      "showToolBar": false,
-      "showAlgebraInput": false,
-      "showMenuBar": false,
-      "showZoomButtons": false,
-      "showFullscreenButton": false,
-      "showResetIcon": false,
-      "enableShiftDragZoom": true,
-      "ggbOnInit": function(api) {
-        api.setCoordSystem(-5, 5, -5, 5); // 設定顯示範圍
-        api.setViewPosition(0, 0);        // 定位至 (0, 0)
-      }
+    // 創建並嵌入 GeoGebra 圖形
+    var app = new GGBApplet({
+      "appName": "classic", // 使用的 GeoGebra 應用，這裡是 classic
+      "showToolBar": true, // 顯示工具欄
+      "showAlgebraInput": true, // 顯示代數輸入框
+      "showMenuBar": true, // 顯示選單欄
+      "showResetIcon": true, // 顯示重置圖標
+      "showZoomButtons": true, // 顯示縮放按鈕
+      "enableShiftDragZoom": true, // 啟用拖動縮放
+      "showLogging": false, // 不顯示日誌
+      "showSuggestionButtons": false, // 隱藏建議按鈕
+      "enableLabelDrags": true, // 允許拖動標籤
+      "width": 800, // 圖形區域的寬度
+      "height": 600, // 圖形區域的高度
     }, true);
 
     window.addEventListener("load", function () {
-      ggbApp.inject('ggb-element');
+      app.inject('ggb-element'); // 將 GeoGebra 活動嵌入頁面
+    });
+
+    // 使用 JavaScript API 設置一些初始圖形
+    window.addEventListener("load", function () {
+      // 當 GeoGebra 圖形載入完成後，這裡可以做一些初始化的操作
+      app.evalCommand('A = (0, 0)'); // 創建點 A (0,0)
+      app.evalCommand('B = (3, 4)'); // 創建點 B (3,4)
+      app.evalCommand('Line(A, B)'); // 創建通過 A 和 B 的直線
+      app.evalCommand('Circle(A, 5)'); // 以 A 為圓心，半徑 5 的圓
     });
   </script>
 </body>
