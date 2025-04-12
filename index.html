@@ -2,13 +2,15 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 自定義實例</title>
+  <title>GeoGebra 乾淨嵌入</title>
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
+      background: #fff;
+      overflow: hidden;
     }
     #ggb-element {
       width: 100%;
@@ -18,29 +20,24 @@
 </head>
 <body>
   <div id="ggb-element"></div>
-  
   <script>
     var app = new GGBApplet({
-      "appName": "graphing",  // 可以是 classic, graphing, geometry 等
-      "material_id": "eji4fm41j6g4",  // 使用你的 GeoGebra 活動 ID
-      "showToolBar": true,
-      "showAlgebraInput": true,
-      "showMenuBar": true,
-      "showResetIcon": true,
-      "showZoomButtons": true,
-      "enableShiftDragZoom": true
+      "appName": "classic", // 可用 "classic", "graphing", "geometry"
+      "material_id": "cbea66c7", // 你的活動 ID
+      "showToolBar": false,
+      "showAlgebraInput": false,
+      "showMenuBar": false,
+      "showResetIcon": false,
+      "showZoomButtons": false,
+      "showFullscreenButton": true,
+      "enableShiftDragZoom": true,
+      "showLogging": false,
+      "showSuggestionButtons": false,
+      "enableLabelDrags": false
     }, true);
-    
     window.addEventListener("load", function () {
-      app.inject('ggb-element');  // 將 GeoGebra 實例注入到指定的 div
+      app.inject('ggb-element');
     });
-
-    // 使用 API 執行自定義操作
-    function moveToCoordinates(x, y) {
-      var ggbApp = app.getApplet();
-      ggbApp.evalCommand("A = (" + x + "," + y + ")");
-      ggbApp.setViewCoordinates(x, y, 10, 10);  // 設定視窗顯示範圍
-    }
   </script>
 </body>
 </html>
