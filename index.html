@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 完全自定義圖形</title>
+  <title>GeoGebra 動態座標更新</title>
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
   <style>
     html, body {
@@ -14,42 +14,51 @@
     }
     #ggb-element {
       width: 100%;
-      height: 100%;
+      height: 80%;
+    }
+    #coordinates {
+      margin-top: 20px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
   <div id="ggb-element"></div>
 
+  <div id="coordinates">
+    <label for="x-coordinate">X: </label>
+    <input type="number" id="x-coordinate" value="0">
+    <label for="y-coordinate">Y: </label>
+    <input type="number" id="y-coordinate" value="0">
+    <button onclick="updatePoint()">更新點</button>
+  </div>
+
   <script>
-    // 創建並嵌入 GeoGebra 圖形
     var app = new GGBApplet({
-      "appName": "classic", // 使用的 GeoGebra 應用，這裡是 classic
-      "showToolBar": true, // 顯示工具欄
-      "showAlgebraInput": true, // 顯示代數輸入框
-      "showMenuBar": true, // 顯示選單欄
-      "showResetIcon": true, // 顯示重置圖標
-      "showZoomButtons": true, // 顯示縮放按鈕
-      "enableShiftDragZoom": true, // 啟用拖動縮放
-      "showLogging": false, // 不顯示日誌
-      "showSuggestionButtons": false, // 隱藏建議按鈕
-      "enableLabelDrags": true, // 允許拖動標籤
-      "width": 800, // 圖形區域的寬度
-      "height": 600, // 圖形區域的高度
+      "appName": "classic",
+      "showToolBar": true,
+      "showAlgebraInput": true,
+      "showMenuBar": true,
+      "showResetIcon": true,
+      "showZoomButtons": true,
+      "enableShiftDragZoom": true,
+      "showLogging": false,
+      "showSuggestionButtons": false,
+      "enableLabelDrags": true,
+      "width": 800,
+      "height": 600
     }, true);
 
     window.addEventListener("load", function () {
-      app.inject('ggb-element'); // 將 GeoGebra 活動嵌入頁面
+      app.inject('ggb-element');
+      app.evalCommand('A = (0, 0)');
     });
 
-    // 使用 JavaScript API 設置一些初始圖形
-    window.addEventListener("load", function () {
-      // 當 GeoGebra 圖形載入完成後，這裡可以做一些初始化的操作
-      app.evalCommand('A = (0, 0)'); // 創建點 A (0,0)
-      app.evalCommand('B = (3, 4)'); // 創建點 B (3,4)
-      app.evalCommand('Line(A, B)'); // 創建通過 A 和 B 的直線
-      app.evalCommand('Circle(A, 5)'); // 以 A 為圓心，半徑 5 的圓
-    });
+    function updatePoint() {
+      var x = document.getElementById("x-coordinate").value;
+      var y = document.getElementById("y-coordinate").value;
+      app.evalCommand(`A = (${x}, ${y})`); // 更新點 A 的位置
+    }
   </script>
 </body>
 </html>
