@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 定位示範</title>
+  <title>GeoGebra 定位範例</title>
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
   <style>
     html, body {
@@ -11,19 +11,19 @@
       height: 100%;
       overflow: hidden;
     }
+    #ggb-element {
+      width: 100%;
+      height: 100%;
+    }
     #controls {
       position: absolute;
       top: 10px;
       left: 10px;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255,255,255,0.9);
       padding: 10px;
-      border-radius: 8px;
-      z-index: 10;
+      border-radius: 6px;
       font-family: sans-serif;
-    }
-    #ggb-element {
-      width: 100%;
-      height: 100%;
+      z-index: 10;
     }
     input {
       width: 60px;
@@ -34,34 +34,36 @@
   <div id="controls">
     X: <input type="number" id="xCoord" value="0">
     Y: <input type="number" id="yCoord" value="0">
-    <button id="moveButton" onclick="moveTo()" disabled>等待載入...</button>
+    <button id="moveButton" onclick="moveTo()" disabled>尚未載入</button>
   </div>
 
   <div id="ggb-element"></div>
 
   <script>
+    let ggbApp;
     let ggbAPI = null;
 
-    const app = new GGBApplet({
-      appName: "classic",
-      material_id: "xjxdh5v4", // ⬅️ 這裡改成你自己的活動 ID
-      showToolBar: false,
-      showAlgebraInput: false,
-      showMenuBar: false,
-      showZoomButtons: false,
-      showFullscreenButton: false,
-      enableShiftDragZoom: true,
-      ggbOnInit: function(api) {
-        console.log("GeoGebra 已載入");
-        ggbAPI = api;
-        const btn = document.getElementById("moveButton");
-        btn.disabled = false;
-        btn.textContent = "定位";
-      }
+    function ggbOnInit(api) {
+      console.log("GeoGebra 載入完成");
+      ggbAPI = api;
+      const btn = document.getElementById("moveButton");
+      btn.disabled = false;
+      btn.textContent = "定位";
+    }
+
+    ggbApp = new GGBApplet({
+      "appName": "classic", // 可換成 graphing 但功能少
+      "material_id": "cbea66c7", // 換成你自己的公開活動 ID
+      "showToolBar": false,
+      "showAlgebraInput": false,
+      "showMenuBar": false,
+      "showZoomButtons": false,
+      "enableShiftDragZoom": true,
+      "ggbOnInit": ggbOnInit // <- 關鍵！確保載入後能執行這函數
     }, true);
 
     window.addEventListener("load", function () {
-      app.inject('ggb-element');
+      ggbApp.inject('ggb-element');
     });
 
     function moveTo() {
@@ -71,8 +73,8 @@
       }
       const x = parseFloat(document.getElementById("xCoord").value);
       const y = parseFloat(document.getElementById("yCoord").value);
-      const range = 10;
-      ggbAPI.setCoordSystem(x - range/2, x + range/2, y - range/2, y + range/2);
+      const span = 10;
+      ggbAPI.setCoordSystem(x - span/2, x + span/2, y - span/2, y + span/2);
     }
   </script>
 </body>
