@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>GeoGebra 定位範例</title>
+  <title>GeoGebra 定位工具</title>
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
   <style>
     html, body {
@@ -34,43 +34,43 @@
   <div id="controls">
     X: <input type="number" id="xCoord" value="0">
     Y: <input type="number" id="yCoord" value="0">
-    <button id="moveButton" onclick="moveTo()" disabled>尚未載入</button>
+    <button id="moveButton" disabled>尚未載入</button>
   </div>
-
   <div id="ggb-element"></div>
 
   <script>
-    let ggbApp;
-    let ggbAPI = null;
+    let ggbApp, ggbAPI = null;
 
-    function ggbOnInit(api) {
-      console.log("GeoGebra 載入完成");
+    // 正確建立 GGBApplet 並設定 ggbOnInit 為全域函式
+    window.ggbOnInit = function(api) {
       ggbAPI = api;
       const btn = document.getElementById("moveButton");
       btn.disabled = false;
       btn.textContent = "定位";
-    }
+      btn.onclick = moveTo;
+    };
 
+    // 建立 applet
     ggbApp = new GGBApplet({
-      "appName": "classic", // 可換成 graphing 但功能少
-      "material_id": "cbea66c7", // 換成你自己的公開活動 ID
+      "appName": "classic",
+      "material_id": "cbea66c7",
       "showToolBar": false,
       "showAlgebraInput": false,
       "showMenuBar": false,
       "showZoomButtons": false,
+      "showFullscreenButton": false,
       "enableShiftDragZoom": true,
-      "ggbOnInit": ggbOnInit // <- 關鍵！確保載入後能執行這函數
+      "ggbOnInit": "ggbOnInit"  // 注意：是字串，代表函數名稱
     }, true);
 
+    // 載入 applet
     window.addEventListener("load", function () {
       ggbApp.inject('ggb-element');
     });
 
+    // 移動畫面函式
     function moveTo() {
-      if (!ggbAPI) {
-        alert("尚未載入完成！");
-        return;
-      }
+      if (!ggbAPI) return alert("尚未載入");
       const x = parseFloat(document.getElementById("xCoord").value);
       const y = parseFloat(document.getElementById("yCoord").value);
       const span = 10;
