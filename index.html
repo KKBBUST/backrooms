@@ -47,6 +47,9 @@
     window.ggbOnInit = function(api) {
       ggbAPI = api;
       console.log("GeoGebra 初始化完成");
+
+      // 初始化後立即定位到 (0, 0)
+      moveTo();
     };
 
     // 建立並注入 Applet
